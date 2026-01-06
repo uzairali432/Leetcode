@@ -46,3 +46,62 @@ console.log(lengthOfLongestSubstring("abcabcbb"));
     
     
 
+Input: nums = [1, 2, 3, 4]
+Output: [24, 12, 8, 6]
+
+var productExceptSelf = function(nums) {
+    const result = new Array(nums.length).fill(1);
+
+    // Prefix products
+    let prefix = 1;
+    for (let i = 0; i < nums.length; i++) {
+        result[i] = prefix;
+        prefix *= nums[i];
+    }
+
+    let suffix = 1;
+    for (let i = nums.length - 1; i >= 0; i--) {
+        result[i] *= suffix;
+        suffix *= nums[i];
+    }
+
+    return result;
+};
+
+console.log(productExceptSelf([1, 2, 3, 4])); 
+
+
+Input: s = "cbbd"
+Output: "bb"
+
+
+var longestPalindrome = function(s) {
+    if (s.length < 2) return s;
+
+    let start = 0;
+    let maxLength = 1;
+
+    const expandFromCenter = (left, right) => {
+        while (left >= 0 && right < s.length && s[left] === s[right]) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    };
+
+    for (let i = 0; i < s.length; i++) {
+        let len1 = expandFromCenter(i, i);   
+        let len2 = expandFromCenter(i, i + 1); 
+        let len = Math.max(len1, len2);
+
+        if (len > maxLength) {
+            maxLength = len;
+            start = i - Math.floor((len - 1) / 2);
+        }
+    }
+
+    return s.substring(start, start + maxLength);
+};
+
+console.log(longestPalindrome("babad")); 
+
