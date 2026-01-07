@@ -105,3 +105,83 @@ var longestPalindrome = function(s) {
 
 console.log(longestPalindrome("babad")); 
 
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+
+
+var minWindow = function(s, t) {
+    if (t.length > s.length) return "";
+
+    const need = {};
+    for (let char of t) {
+        need[char] = (need[char] || 0) + 1;
+    }
+
+    let left = 0;
+    let right = 0;
+    let required = Object.keys(need).length;
+    let formed = 0;
+
+    const windowCounts = {};
+    let minLen = Infinity;
+    let start = 0;
+
+    while (right < s.length) {
+        let char = s[right];
+        windowCounts[char] = (windowCounts[char] || 0) + 1;
+
+        if (need[char] && windowCounts[char] === need[char]) {
+            formed++;
+        }
+
+        while (left <= right && formed === required) {
+            if (right - left + 1 < minLen) {
+                minLen = right - left + 1;
+                start = left;
+            }
+
+            let leftChar = s[left];
+            windowCounts[leftChar]--;
+            if (need[leftChar] && windowCounts[leftChar] < need[leftChar]) {
+                formed--;
+            }
+            left++;
+        }
+
+        right++;
+    }
+
+    return minLen === Infinity ? "" : s.substring(start, start + minLen);
+};
+
+console.log(minWindow("ADOBECODEBANC", "ABC")); // "BANC"
+
+
+
+Input: s = "()"
+Output: true
+
+
+var isValid = function(s) {
+    const stack = [];
+    const map = {
+        ')': '(',
+        '}': '{',
+        ']': '['
+    };
+
+    for (let char of s) {
+        if (char === '(' || char === '{' || char === '[') {
+            stack.push(char);
+        } else {
+            if (stack.pop() !== map[char]) {
+                return false;
+            }
+        }
+    }
+
+    return stack.length === 0;
+};
+
+console.log(isValid("()[]{}")); // true
+console.log(isValid("(]"));     // false
