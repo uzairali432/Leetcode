@@ -185,3 +185,39 @@ var isValid = function(s) {
 
 console.log(isValid("()[]{}")); // true
 console.log(isValid("(]"));     // false
+
+
+
+
+function removeDuplicates(nums) {
+    if (!nums.length) return 0;
+    let i = 0;
+    for (let j = 1; j < nums.length; j++) {
+        if (nums[j] !== nums[i]) {
+            i++;
+            nums[i] = nums[j];
+        }
+    }
+    return i + 1;
+}
+
+let arr = [1,1,2];
+let length = removeDuplicates(arr);
+console.log(arr.slice(0,length)); 
+
+
+function intersect(nums1, nums2) {
+    const count = {};
+    for (let num of nums1) count[num] = (count[num] || 0) + 1;
+    const result = [];
+    for (let num of nums2) {
+        if (count[num] > 0) {
+            result.push(num);
+            count[num]--;
+        }
+    }
+    return result;
+}
+
+console.log(intersect([1,2,2,1], [2,2])); 
+
